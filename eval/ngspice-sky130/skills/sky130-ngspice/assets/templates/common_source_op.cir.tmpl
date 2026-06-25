@@ -1,8 +1,8 @@
-* Sky130 common-source operating point and approximate small-signal gain
-.include "../models/sky130.lib.spice"
+* Sky130 common-source operating-point probe
+.include "{sky130_lib}"
 
 Vdd vdd 0 1.8
-Vin in 0 0.9 AC 1
+Vin in 0 0.9
 Rd vdd out 20k
 
 Xn out in 0 0 sky130_fd_pr__nfet_01v8 w=1.26 l=0.15
@@ -17,3 +17,4 @@ print gm gds gain_est v(out)
 .endc
 
 .end
+

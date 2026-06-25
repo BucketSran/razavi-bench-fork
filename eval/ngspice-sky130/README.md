@@ -27,6 +27,33 @@ simulation as evidence for analog reasoning. Many Razavi questions are
 qualitative or under-specified, so simulation should be used as a supporting
 tool, not as a replacement for small-signal reasoning.
 
+## Sky130 Ngspice Skill
+
+This directory also includes a lightweight skill-style guide under:
+
+```text
+skills/sky130-ngspice/
+```
+
+It is adapted from the ngspice workflow in
+`Arcadia-1/gmoverid-skill`, but stripped down for this benchmark:
+
+- it uses this directory's Sky130 model bundle, not PTM models;
+- it focuses on operating-point and small-signal probes;
+- it warns agents to verify topology, bias condition, device sizes, and measured
+  quantity before trusting simulation output.
+
+The helper entry point is:
+
+```bash
+python skills/sky130-ngspice/assets/run_op_probe.py \
+  --template nfet_op \
+  --out /tmp/nfet_op.cir
+```
+
+In Vela, the same skill can be exposed at
+`/tools/ngspice-sky130/skills/sky130-ngspice/`.
+
 ## Run The Examples
 
 From the repository root:
@@ -44,4 +71,3 @@ The included model files are a minimal subset derived from the open-source
 SkyWater SKY130 primitive models, licensed under Apache 2.0. They are included
 to make the benchmark environment reproducible without requiring a full local
 PDK installation.
-
