@@ -1,4 +1,5 @@
 .DS_Store
 WORK/
 sources/
+*.pdf
 verification/sky130_ngspice/*.log
