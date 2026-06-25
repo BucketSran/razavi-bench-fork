@@ -2,3 +2,4 @@
 WORK/
 sources/
 verification/
+tasks/*/task.toml
