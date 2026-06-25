@@ -40,6 +40,53 @@ ngspice -b /app/your_deck.cir > /app/your_deck.log 2>&1
 
 6. Read the log, then write only the final reasoning to `/app/answer.md`.
 
+## Zero-Start Quickstart
+
+If you have never used ngspice in this environment, do this first:
+
+```bash
+ls -la /app
+ls -la /tools/ngspice-sky130/models
+ls -la /tools/ngspice-sky130/examples
+ngspice --version
+```
+
+Then run a known-good probe:
+
+```bash
+python3 /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
+  --template nfet_op \
+  --out /app/nfet_op.cir
+
+sed -n '1,120p' /app/nfet_op.cir
+sed -n '1,160p' /app/nfet_op.log
+```
+
+This teaches the three essential pieces:
+
+- a deck includes `sky130.lib.spice`;
+- the transistor instance name `Xn` maps to ngspice operating-point variables such as `@m.xn.msky130_fd_pr__nfet_01v8[gm]`;
+- `.control ... print ... .endc` prints values into the log.
+
+After that, copy the closest generated deck and change only what the question requires.
+
+Available helper templates:
+
+```text
+nfet_op
+pfet_op
+common_source_op
+source_follower_op
+```
+
+Example:
+
+```bash
+python3 /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
+  --template source_follower_op \
+  --out /app/source_follower_op.cir
+```
+
 ## Common Checks
 
 Operating point:
@@ -75,6 +122,30 @@ Sanity checks before trusting a result:
 - Are you holding the same quantity fixed as the question? For example, fixed overdrive, fixed current, fixed geometry ratio, and fixed VGS can produce different trends.
 - Are the model limits relevant? A Sky130 short-channel simulation may disagree with a long-channel textbook assumption.
 - Does the sign convention match the circuit? PMOS and NMOS signs can look different while the small-signal form is equivalent.
+- Does the question provide enough numerical detail for simulation? If not, state the assumption and use simulation only as a qualitative sanity check.
+- Did the deck answer the same question? A common-source example does not answer a source-follower question; a fixed-`VGS` sweep does not answer a fixed-current design question.
+
+## When Not To Simulate
+
+Skip simulation, or treat it only as secondary evidence, when:
+
+- the question asks for a pure topology classification;
+- the figure lacks enough device sizes, loads, or bias points;
+- the intended answer is a long-channel textbook trend;
+- the question asks about sign conventions, model form, or feedback interpretation.
+
+In these cases, write the analog reasoning directly and mention any assumptions.
+
+## Writing The Final Answer
+
+The grader reads `/app/answer.md`, not your `.cir` files or logs. Your final answer should include:
+
+- the circuit conclusion;
+- the key analog mechanism;
+- the relevant assumption, if simulation required one;
+- at most one concise simulation-backed number or trend, only if it truly supports the conclusion.
+
+Do not paste raw ngspice logs into `/app/answer.md`.
 
 ## Helper Scripts
 
@@ -83,7 +154,7 @@ The `assets/` directory contains small Python helpers that copy templates into `
 Example:
 
 ```bash
-python /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
+python3 /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
   --template nfet_op \
   --out /app/nfet_op.cir
 ```
