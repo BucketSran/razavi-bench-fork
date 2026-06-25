@@ -13,6 +13,11 @@ from pathlib import Path
 
 ASSET_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = ASSET_DIR / "templates"
+NETLIST_DIR = ASSET_DIR / "netlist"
+OUTPUT_DIR = Path(os.environ.get("SKY130_NGSPICE_OUTPUT_DIR", Path.cwd() / "ngspice_outputs")).resolve()
+LOG_DIR = OUTPUT_DIR
+for _directory in (LOG_DIR, OUTPUT_DIR):
+    _directory.mkdir(parents=True, exist_ok=True)
 
 
 def find_ngspice_root() -> Path:
@@ -30,6 +35,9 @@ def find_ngspice_root() -> Path:
     for candidate in candidates:
         if (candidate / "models" / "sky130.lib.spice").exists():
             return candidate
+        checkout_models = candidate / "eval" / "ngspice-sky130"
+        if (checkout_models / "models" / "sky130.lib.spice").exists():
+            return checkout_models
     raise FileNotFoundError("could not find models/sky130.lib.spice")
 
 
@@ -44,11 +52,23 @@ def check_ngspice() -> str:
     return exe
 
 
+def _template_path(template_name: str) -> Path:
+    choices = [TEMPLATE_DIR / f"{template_name}.cir.tmpl", NETLIST_DIR / f"{template_name}.cir.tmpl"]
+    for template in choices:
+        if template.exists():
+            return template
+    names = sorted(
+        path.name.removesuffix(".cir.tmpl")
+        for root in (TEMPLATE_DIR, NETLIST_DIR)
+        for path in root.glob("*.cir.tmpl")
+    )
+    raise FileNotFoundError(f"unknown template {template_name!r}; choices: {', '.join(names)}")
+
+
 def render_template(template_name: str, output: Path, **kwargs: str) -> Path:
-    template = TEMPLATE_DIR / f"{template_name}.cir.tmpl"
+    template = _template_path(template_name)
     if not template.exists():
-        choices = ", ".join(sorted(path.stem.replace(".cir", "") for path in TEMPLATE_DIR.glob("*.cir.tmpl")))
-        raise FileNotFoundError(f"unknown template {template_name!r}; choices: {choices}")
+        raise FileNotFoundError(f"unknown template {template_name!r}")
     text = template.read_text(encoding="utf-8").format(
         sky130_lib=str(model_include()).replace("\\", "/"),
         **kwargs,
@@ -84,6 +104,19 @@ def parse_prints(log: Path) -> dict[str, float]:
             except ValueError:
                 pass
     return values
+
+
+def parse_numeric_rows(log: Path, min_cols: int = 2) -> list[list[float]]:
+    rows: list[list[float]] = []
+    for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
+        parts = line.strip().replace(",", " ").split()
+        if len(parts) < min_cols + 1 or not parts[0].isdigit():
+            continue
+        try:
+            rows.append([float(part) for part in parts[1:]])
+        except ValueError:
+            continue
+    return rows
 
 
 def main() -> None:

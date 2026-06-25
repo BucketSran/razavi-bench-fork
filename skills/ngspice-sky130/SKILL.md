@@ -26,6 +26,21 @@ The core include is:
 
 If you are running from a checkout instead of Vela, use a relative path to `eval/ngspice-sky130/models/sky130.lib.spice`.
 
+## Bundled Assets
+
+The skill includes reusable Sky130 templates and runners:
+
+```text
+assets/
+├── run_op_probe.py        # Render and run one operating-point probe
+├── run_examples.py        # Run standard sanity-check examples
+├── sky130_common.py       # Model discovery, template rendering, ngspice runner
+├── templates/             # Small OP probes: nfet, pfet, CS, source follower
+└── netlist/               # Standard examples: RC, I-V, CS AC, mirror, TG Ron
+```
+
+The standard examples write generated decks and logs to `./ngspice_outputs/` by default, or to `$SKY130_NGSPICE_OUTPUT_DIR` if set. Treat these as scratch artifacts. Do not edit files under `.claude/skills` unless the user is improving the skill itself; copy a generated deck into `/app` before adapting it for a task.
+
 ## Minimal Workflow
 
 1. Read `/app/instruction.md` and inspect any PNGs in `/app`.
@@ -85,6 +100,25 @@ Example:
 python3 /app/.claude/skills/ngspice-sky130/assets/run_op_probe.py \
   --template source_follower_op \
   --out /app/source_follower_op.cir
+```
+
+To see the broader example set:
+
+```bash
+python3 /app/.claude/skills/ngspice-sky130/assets/run_examples.py --example all
+python3 /app/.claude/skills/ngspice-sky130/assets/run_examples.py --example nmos_iv
+python3 /app/.claude/skills/ngspice-sky130/assets/run_examples.py --example cs_ac
+```
+
+Available standard examples:
+
+```text
+rc_tran
+rc_ac
+nmos_iv
+cs_ac
+current_mirror
+tgate_ron
 ```
 
 ## Choosing A Probe
