@@ -1,5 +1,5 @@
 ---
-name: sky130-ngspice
+name: ngspice-sky130
 description: "Use ngspice with the Razavi-Bench Sky130 model bundle for small analog-circuit probes. Provides minimal, reusable workflows for operating-point checks, small-signal parameter extraction, and simple AC/transient sanity tests. Use as supporting evidence only; final answers must still be analog-circuit reasoning."
 ---
 
@@ -16,7 +16,7 @@ In the Razavi-Bench `ngspice-sky130` setting:
 - task files are in `/app`;
 - Sky130 models are in `/tools/ngspice-sky130/models`;
 - example decks are in `/tools/ngspice-sky130/examples`;
-- this skill, when installed, is in `/tools/ngspice-sky130/skills/sky130-ngspice`.
+- this skill, when installed, is in `/tools/ngspice-sky130/skills/ngspice-sky130`.
 
 The core include is:
 
@@ -83,10 +83,9 @@ The `assets/` directory contains small Python helpers that copy templates into `
 Example:
 
 ```bash
-python /tools/ngspice-sky130/skills/sky130-ngspice/assets/run_op_probe.py \
+python /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
   --template nfet_op \
   --out /app/nfet_op.cir
 ```
 
 Then inspect `/app/nfet_op.log`.
-

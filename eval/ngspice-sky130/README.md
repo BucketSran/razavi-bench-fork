@@ -32,7 +32,7 @@ tool, not as a replacement for small-signal reasoning.
 This directory also includes a lightweight skill-style guide under:
 
 ```text
-skills/sky130-ngspice/
+skills/ngspice-sky130/
 ```
 
 It is adapted from the ngspice workflow in
@@ -46,13 +46,13 @@ It is adapted from the ngspice workflow in
 The helper entry point is:
 
 ```bash
-python skills/sky130-ngspice/assets/run_op_probe.py \
+python ../../skills/ngspice-sky130/assets/run_op_probe.py \
   --template nfet_op \
   --out /tmp/nfet_op.cir
 ```
 
 In Vela, the same skill can be exposed at
-`/tools/ngspice-sky130/skills/sky130-ngspice/`.
+`/tools/ngspice-sky130/skills/ngspice-sky130/`.
 
 ## Run The Examples
 
