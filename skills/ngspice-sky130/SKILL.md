@@ -16,7 +16,7 @@ In the Razavi-Bench `ngspice-sky130` setting:
 - task files are in `/app`;
 - Sky130 models are in `/tools/ngspice-sky130/models`;
 - example decks are in `/tools/ngspice-sky130/examples`;
-- this skill, when installed, is in `/tools/ngspice-sky130/skills/ngspice-sky130`.
+- this skill, when installed for Claude Code, is in `/app/.claude/skills/ngspice-sky130`.
 
 The core include is:
 
@@ -54,7 +54,7 @@ ngspice --version
 Then run a known-good probe:
 
 ```bash
-python3 /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
+python3 /app/.claude/skills/ngspice-sky130/assets/run_op_probe.py \
   --template nfet_op \
   --out /app/nfet_op.cir
 
@@ -82,10 +82,24 @@ source_follower_op
 Example:
 
 ```bash
-python3 /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
+python3 /app/.claude/skills/ngspice-sky130/assets/run_op_probe.py \
   --template source_follower_op \
   --out /app/source_follower_op.cir
 ```
+
+## Choosing A Probe
+
+Before writing a deck, classify the task. Use ngspice only when the task has a concrete electrical quantity that can be probed under a stated bias condition.
+
+| Question type | Useful probe | Avoid |
+| --- | --- | --- |
+| Device region, saturation, overdrive, bias feasibility | `.op`, print node voltages and device operating-point values | treating one arbitrary bias as proof for all operating points |
+| Gain, source follower gain, transconductance trend | `.op` for `gm`, `gds`, `gmbs`; optional `.ac` if the topology is fully specified | using a common-source deck for a different topology |
+| Input/output resistance | inject a small test current or voltage source and compute `v/i` | measuring the wrong port or leaving independent sources active incorrectly |
+| Capacitance, pole, speed, or phase-noise trend | use simulation only as a sanity check for sign/trend after deriving the mechanism | pretending Sky130 short-channel numbers are the textbook answer |
+| Feedback interpretation, latch topology, oscillation condition, qualitative “why” questions | usually answer from analog reasoning directly | forcing a simulation without a complete transient setup |
+
+If the figure or prompt omits sizes, loads, bias currents, clock waveforms, or initial conditions, state the missing assumption. A simulation with invented values can support a trend, but it cannot replace the reasoning.
 
 ## Common Checks
 
@@ -154,7 +168,7 @@ The `assets/` directory contains small Python helpers that copy templates into `
 Example:
 
 ```bash
-python3 /tools/ngspice-sky130/skills/ngspice-sky130/assets/run_op_probe.py \
+python3 /app/.claude/skills/ngspice-sky130/assets/run_op_probe.py \
   --template nfet_op \
   --out /app/nfet_op.cir
 ```

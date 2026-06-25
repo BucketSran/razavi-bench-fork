@@ -51,8 +51,8 @@ python ../../skills/ngspice-sky130/assets/run_op_probe.py \
   --out /tmp/nfet_op.cir
 ```
 
-In Vela, the same skill can be exposed at
-`/tools/ngspice-sky130/skills/ngspice-sky130/`.
+In Vela, the same skill can be installed for Claude Code at
+`/app/.claude/skills/ngspice-sky130/` before the agent starts.
 
 ## Run The Examples
 
