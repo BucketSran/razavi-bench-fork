@@ -2,4 +2,5 @@
 WORK/
 sources/
 verification/
+verification/sky130_ngspice/*.log
 tasks/*/task.toml
