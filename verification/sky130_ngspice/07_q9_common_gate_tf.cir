@@ -1,0 +1,12 @@
+* Part 1 Q9: source-input common-gate stage has positive voltage gain.
+.lib sources/sky130/volare/volare/sky130/versions/c6d73a35f524070e85faff4a6a9eef49553ebc2b/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+Vdd vdd 0 1.8
+Vg g 0 1.2
+Vin s 0 0.5 AC 1
+Rd vdd out 10k
+Xn out g s 0 sky130_fd_pr__nfet_01v8 w=1.26 l=0.15
+
+.op
+.tf v(out) Vin
+.end

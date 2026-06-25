@@ -1,6 +1,6 @@
 # Golden Solution - part2-006-oscillates-change
 
-Yes, the answer changes once oscillation is considered. The effective resistance is set by the dynamic charging and discharging of the oscillator nodes, not by a dc path that is mostly off.
+Considering the oscillation does not make `RX` much larger. The effective resistance is set by the dynamic charging and discharging of the oscillator nodes, not by a dc path that is mostly off.
 
 Using `f0 = 1/(6 TD)` for a three-stage ring, the equivalent supply resistance can be written approximately as
 

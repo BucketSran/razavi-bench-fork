@@ -1,0 +1,18 @@
+* output resistance comparison using .tf
+.lib sources/sky130/volare/volare/sky130/versions/c6d73a35f524070e85faff4a6a9eef49553ebc2b/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+Vdd vdd 0 1.8
+Vb1 b1 0 0.70
+Vb2 b2 0 1.05
+* single NMOS current sink with dc bias current from supply
+Ib1 vdd out1 20u
+Xsingle out1 b1 0 0 sky130_fd_pr__nfet_01v8 w=1.26 l=0.5
+It1 out1 0 DC 0 AC 1
+* cascode NMOS current sink
+Ib2 vdd out2 20u
+Xlow x b1 0 0 sky130_fd_pr__nfet_01v8 w=1.26 l=0.5
+Xcas out2 b2 x 0 sky130_fd_pr__nfet_01v8 w=1.26 l=0.5
+It2 out2 0 DC 0 AC 1
+.op
+.tf v(out1) It1
+.tf v(out2) It2
+.end

@@ -1,9 +1,17 @@
 # Golden Solution - part1-005-sketch-ix-versus-vx
 
-The gate is held at 1 V and the source is grounded, so `VGS = 1 V` is fixed. The drain voltage is `VX`.
+In Figure 2, `VX` is applied to the gate, the source is grounded, and the drain is held at `1 V`. Thus `VGS = VX` and `VDS = 1 V`.
 
-For `VX` below the threshold for conduction, `IX` is approximately zero. Once the device conducts, it first operates in the triode region and `IX` increases roughly linearly for small `VX`. When `VX >= VGS - VTH = 1 V - VTH`, the device enters saturation and `IX` approaches the saturation current
+For `VX <= VTH`, the transistor is off and `IX ~= 0`.
 
-`ID ~= (1/2) mu Cox (W/L) (1 V - VTH)^2`.
+For `VTH < VX < VTH + 1 V`, the condition `VDS >= VGS - VTH` is satisfied, so the device is in saturation and
 
-With channel-length modulation, the saturation-region current has a small positive slope.
+`IX ~= (1/2) mu_n Cox (W/L) (VX - VTH)^2`
+
+ignoring channel-length modulation.
+
+For `VX >= VTH + 1 V`, the device enters the triode region because `VDS = 1 V < VGS - VTH`. The current is then
+
+`IX ~= mu_n Cox (W/L) [(VX - VTH)(1 V) - (1/2)(1 V)^2]`.
+
+So the sketch is zero below threshold, then quadratic in saturation, then roughly linear in `VX` after the drain-to-source voltage limits the device to the triode region.

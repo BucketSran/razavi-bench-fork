@@ -72,7 +72,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-007-analyze",
+    "id": "part1-007-pmos-common-source-source-degeneration",
     "part": "part1",
     "question_number": 7,
     "figures": [
@@ -81,12 +81,12 @@
     "source_figures": [
       4
     ],
-    "path": "tasks/part1-007-analyze",
+    "path": "tasks/part1-007-pmos-common-source-source-degeneration",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-008-analyze",
+    "id": "part1-008-source-follower",
     "part": "part1",
     "question_number": 8,
     "figures": [
@@ -95,12 +95,12 @@
     "source_figures": [
       5
     ],
-    "path": "tasks/part1-008-analyze",
+    "path": "tasks/part1-008-source-follower",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-009-analyze",
+    "id": "part1-009-common-gate-source-input",
     "part": "part1",
     "question_number": 9,
     "figures": [
@@ -109,12 +109,12 @@
     "source_figures": [
       6
     ],
-    "path": "tasks/part1-009-analyze",
+    "path": "tasks/part1-009-common-gate-source-input",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-010-analyze",
+    "id": "part1-010-source-input-shorted-to-ground",
     "part": "part1",
     "question_number": 10,
     "figures": [
@@ -123,7 +123,7 @@
     "source_figures": [
       7
     ],
-    "path": "tasks/part1-010-analyze",
+    "path": "tasks/part1-010-source-input-shorted-to-ground",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
@@ -142,7 +142,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-012-analyze",
+    "id": "part1-012-source-input-resistive-feedback",
     "part": "part1",
     "question_number": 12,
     "figures": [
@@ -151,12 +151,12 @@
     "source_figures": [
       9
     ],
-    "path": "tasks/part1-012-analyze",
+    "path": "tasks/part1-012-source-input-resistive-feedback",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-013-analyze",
+    "id": "part1-013-source-follower-current-source-load",
     "part": "part1",
     "question_number": 13,
     "figures": [
@@ -165,12 +165,12 @@
     "source_figures": [
       10
     ],
-    "path": "tasks/part1-013-analyze",
+    "path": "tasks/part1-013-source-follower-current-source-load",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-014-analyze",
+    "id": "part1-014-cmos-inverter",
     "part": "part1",
     "question_number": 14,
     "figures": [
@@ -179,12 +179,12 @@
     "source_figures": [
       11
     ],
-    "path": "tasks/part1-014-analyze",
+    "path": "tasks/part1-014-cmos-inverter",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-015-analyze-b",
+    "id": "part1-015-malformed-cmos-inverter",
     "part": "part1",
     "question_number": 15,
     "figures": [
@@ -193,12 +193,12 @@
     "source_figures": [
       11
     ],
-    "path": "tasks/part1-015-analyze-b",
+    "path": "tasks/part1-015-malformed-cmos-inverter",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-016-analyze",
+    "id": "part1-016-common-source-diode-connected-load",
     "part": "part1",
     "question_number": 16,
     "figures": [
@@ -207,12 +207,12 @@
     "source_figures": [
       12
     ],
-    "path": "tasks/part1-016-analyze",
+    "path": "tasks/part1-016-common-source-diode-connected-load",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-017-analyze",
+    "id": "part1-017-pmos-input-invalid-pulldown",
     "part": "part1",
     "question_number": 17,
     "figures": [
@@ -221,7 +221,7 @@
     "source_figures": [
       13
     ],
-    "path": "tasks/part1-017-analyze",
+    "path": "tasks/part1-017-pmos-input-invalid-pulldown",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
@@ -254,7 +254,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-020-analyze",
+    "id": "part1-020-nmos-cascode-gain-stage",
     "part": "part1",
     "question_number": 20,
     "figures": [
@@ -263,7 +263,7 @@
     "source_figures": [
       15
     ],
-    "path": "tasks/part1-020-analyze",
+    "path": "tasks/part1-020-nmos-cascode-gain-stage",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
@@ -292,7 +292,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-023-analyze",
+    "id": "part1-023-common-gate-pmos-load",
     "part": "part1",
     "question_number": 23,
     "figures": [
@@ -301,7 +301,7 @@
     "source_figures": [
       17
     ],
-    "path": "tasks/part1-023-analyze",
+    "path": "tasks/part1-023-common-gate-pmos-load",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
@@ -320,7 +320,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-025-analyze",
+    "id": "part1-025-series-nmos-effective-long-channel",
     "part": "part1",
     "question_number": 25,
     "figures": [
@@ -329,12 +329,12 @@
     "source_figures": [
       19
     ],
-    "path": "tasks/part1-025-analyze",
+    "path": "tasks/part1-025-series-nmos-effective-long-channel",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-026-analyze",
+    "id": "part1-026-source-follower-drives-common-gate",
     "part": "part1",
     "question_number": 26,
     "figures": [
@@ -343,7 +343,7 @@
     "source_figures": [
       20
     ],
-    "path": "tasks/part1-026-analyze",
+    "path": "tasks/part1-026-source-follower-drives-common-gate",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
@@ -362,7 +362,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-028-analyze",
+    "id": "part1-028-current-input-positive-feedback",
     "part": "part1",
     "question_number": 28,
     "figures": [
@@ -371,12 +371,12 @@
     "source_figures": [
       22
     ],
-    "path": "tasks/part1-028-analyze",
+    "path": "tasks/part1-028-current-input-positive-feedback",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-029-analyze",
+    "id": "part1-029-feedback-transimpedance-amplifier",
     "part": "part1",
     "question_number": 29,
     "figures": [
@@ -385,12 +385,12 @@
     "source_figures": [
       23
     ],
-    "path": "tasks/part1-029-analyze",
+    "path": "tasks/part1-029-feedback-transimpedance-amplifier",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part1-030-analyze",
+    "id": "part1-030-pmos-current-input-feedback",
     "part": "part1",
     "question_number": 30,
     "figures": [
@@ -399,7 +399,7 @@
     "source_figures": [
       24
     ],
-    "path": "tasks/part1-030-analyze",
+    "path": "tasks/part1-030-pmos-current-input-feedback",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
@@ -568,7 +568,7 @@
     "golden_solution_file": "golden_solution.md"
   },
   {
-    "id": "part2-013-analyze-arrangement",
+    "id": "part2-013-dynamic-latch-divide-by-two",
     "part": "part2",
     "question_number": 13,
     "figures": [
@@ -577,7 +577,7 @@
     "source_figures": [
       12
     ],
-    "path": "tasks/part2-013-analyze-arrangement",
+    "path": "tasks/part2-013-dynamic-latch-divide-by-two",
     "has_golden_solution": true,
     "golden_solution_file": "golden_solution.md"
   },
