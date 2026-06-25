@@ -11,6 +11,17 @@ tasks/<part>-<number>-<slug>/
   instruction.md
   golden_solution.md
   figure-xx.png  # when the question has a figure
+
+eval/
+  README.md
+  closed-book/
+    Dockerfile
+    README.md
+  ngspice-sky130/
+    Dockerfile
+    README.md
+    examples/
+    models/
 ```
 
 
@@ -33,6 +44,15 @@ Evaluation guidance:
 - See `evaluation_rubric.md` for the inferred 0-4 grading rubric. The rubric is
   summarized from Razavi's comments and scores in the source articles; it is not
   a verbatim per-point rubric published in the articles.
+- The benchmark defines two public evaluation settings:
+  - `eval/closed-book`: the agent sees only the question text and figures, then
+    writes `/app/answer.md`.
+  - `eval/ngspice-sky130`: the agent sees the same question text and figures,
+    but can also use ngspice plus a lightweight Sky130 model bundle while
+    reasoning. The required final output is still `/app/answer.md`.
+- Both settings are scored from the final answer only, using
+  `golden_solution.md` and `evaluation_rubric.md`. Simulator transcripts,
+  netlists, and other intermediate files are not directly graded.
 
 Verification notes:
 

@@ -1,6 +1,9 @@
+.git
+__pycache__
+*.pyc
 .DS_Store
+._*
 WORK/
 sources/
-*.pdf
 verification/sky130_ngspice/*.log
 eval/ngspice-sky130/examples/*.log
