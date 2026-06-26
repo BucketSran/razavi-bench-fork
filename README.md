@@ -5,21 +5,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Arcadia-1/razavi-bench/stargazers"><img src="https://img.shields.io/github/stars/Arcadia-1/razavi-bench?style=flat-square&color=f5c542&logo=github" alt="GitHub stars"/></a>
-  <a href="https://github.com/Arcadia-1/razavi-bench/network/members"><img src="https://img.shields.io/github/forks/Arcadia-1/razavi-bench?style=flat-square&color=f5c542" alt="GitHub forks"/></a>
-  <a href="https://github.com/Arcadia-1/razavi-bench/issues"><img src="https://img.shields.io/github/issues/Arcadia-1/razavi-bench?style=flat-square&color=3fb950" alt="Open issues"/></a>
-  <a href="https://github.com/Arcadia-1/razavi-bench/commits/main"><img src="https://img.shields.io/github/last-commit/Arcadia-1/razavi-bench?style=flat-square&color=3fb950" alt="Last commit"/></a>
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/tasks-50-blue?style=flat-square" alt="50 tasks"/>
   <img src="https://img.shields.io/badge/figures-44-blue?style=flat-square" alt="44 figures"/>
   <img src="https://img.shields.io/badge/domain-analog%20design-8a63d2?style=flat-square" alt="Analog design"/>
   <img src="https://img.shields.io/badge/format-markdown-lightgrey?style=flat-square" alt="Markdown format"/>
-</p>
-
-<p align="center">
-  <img src="docs/assets/razavi_3rollout_model_rows.png" alt="Razavi-bench model comparison" width="86%"/>
 </p>
 
 Razavi-bench packages the question-answer assessments from Behzad Razavi's
@@ -100,3 +89,9 @@ Part 1 article contains Q1 through Q30. No synthetic questions were added.
   IEEE Solid-State Circuits Magazine, vol. 17, no. 4, pp. 11-15, Fall 2025.
 - B. Razavi, "Analog Design Experiments With AI—Part 2 [The Analog Mind]," in
   IEEE Solid-State Circuits Magazine, vol. 18, no. 2, pp. 8-13, Spring 2026.
+
+## 2026年6月26日的测试结果
+
+<p align="center">
+  <img src="docs/assets/razavi_3rollout_model_rows.png" alt="Razavi-bench 2026-06-26 test results" width="86%"/>
+</p>
