@@ -46,7 +46,6 @@ Top-level files:
 | Path | Purpose |
 |---|---|
 | `manifest.json` | Machine-readable task index |
-| `manifest.jsonl` | Line-delimited task index |
 | `evaluation_rubric.md` | Inferred 0-4 grading rubric from Razavi's comments and scores |
 | `verification/` | Human audit notes and representative simulation checks |
 

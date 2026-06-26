@@ -1,9 +1,0 @@
-.git
-__pycache__
-*.pyc
-.DS_Store
-._*
-WORK/
-sources/
-verification/sky130_ngspice/*.log
-eval/ngspice-sky130/examples/*.log
