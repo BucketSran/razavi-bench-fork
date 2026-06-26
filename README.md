@@ -1,7 +1,7 @@
 <h1 align="center">Razavi-bench</h1>
 
 <p align="center">
-  <strong>A compact benchmark for analog-design reasoning.</strong>
+  <strong>An expert-curated benchmark for analog-design reasoning.</strong>
 </p>
 
 <p align="center">
