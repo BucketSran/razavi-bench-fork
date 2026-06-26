@@ -6,7 +6,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/tasks-50-blue?style=flat-square" alt="50 tasks"/>
-  <img src="https://img.shields.io/badge/figures-44-blue?style=flat-square" alt="44 figures"/>
   <img src="https://img.shields.io/badge/domain-analog%20design-8a63d2?style=flat-square" alt="Analog design"/>
   <img src="https://img.shields.io/badge/format-markdown-lightgrey?style=flat-square" alt="Markdown format"/>
 </p>
@@ -28,7 +27,6 @@ stored as task data.
 | Total tasks | 50 |
 | Part 1 | 30 questions, Q1-Q30 |
 | Part 2 | 20 questions, Q1-Q20 |
-| Task figures | 44 |
 | `task.toml` files | 0 |
 | Source PDFs | Not tracked |
 
@@ -89,7 +87,7 @@ Part 1 article contains Q1 through Q30. No synthetic questions were added.
 - B. Razavi, "Analog Design Experiments With AI—Part 2 [The Analog Mind]," in
   IEEE Solid-State Circuits Magazine, vol. 18, no. 2, pp. 8-13, Spring 2026.
 
-## 2026年6月26日的测试结果
+## Test Results From June 26, 2026
 
 <p align="center">
   <img src="docs/assets/razavi_3rollout_model_rows.png" alt="Razavi-bench 2026-06-26 test results" width="86%"/>
