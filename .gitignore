@@ -5,7 +5,4 @@ WORK/
 sources/
 *.pdf
 verification/sky130_ngspice/*.log
-eval/ngspice-sky130/examples/*.log
-skills/ngspice-sky130/assets/logs/
-skills/ngspice-sky130/assets/outputs/
 ngspice_outputs/
