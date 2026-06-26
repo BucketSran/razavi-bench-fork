@@ -68,3 +68,10 @@ feedback, or conceptual reasoning tasks without specified sizes and biases.
 
 The user request originally mentioned 40 questions for Part 1, but the available
 Part 1 article contains Q1 through Q30. No synthetic questions were added.
+
+## References
+
+- B. Razavi, "Analog Design Experiments With AI—Part 1 [The Analog Mind]," in
+  IEEE Solid-State Circuits Magazine, vol. 17, no. 4, pp. 11-15, Fall 2025.
+- B. Razavi, "Analog Design Experiments With AI—Part 2 [The Analog Mind]," in
+  IEEE Solid-State Circuits Magazine, vol. 18, no. 2, pp. 8-13, Spring 2026.
