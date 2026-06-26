@@ -4,5 +4,3 @@ __pycache__/
 WORK/
 sources/
 *.pdf
-verification/sky130_ngspice/*.log
-ngspice_outputs/

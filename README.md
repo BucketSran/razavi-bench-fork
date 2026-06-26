@@ -45,7 +45,6 @@ Top-level files:
 |---|---|
 | `manifest.json` | Machine-readable task index |
 | `evaluation_rubric.md` | Inferred 0-4 grading rubric from Razavi's comments and scores |
-| `verification/` | Human audit notes and representative simulation checks |
 
 ## Task Format
 
@@ -56,24 +55,6 @@ scores, and explanatory commentary.
 Each `golden_solution.md` contains the expected reasoning and final answer for
 evaluation. The golden answers were reviewed against the source articles,
 figures, and circuit analysis.
-
-## Curation
-
-The golden answers have been reviewed task by task. The review record is:
-
-```text
-verification/golden_solution_review.md
-```
-
-Representative ngspice/Sky130 checks are summarized in:
-
-```text
-verification/sky130_ngspice/summary.md
-```
-
-These simulations validate selected device and trend claims. They are not meant
-to be a one-netlist-per-task proof, because many questions are topology,
-feedback, or conceptual reasoning tasks without specified sizes and biases.
 
 ## Notes
 
