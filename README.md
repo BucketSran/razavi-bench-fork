@@ -1,39 +1,70 @@
-# Analog Design AI Benchmark
+# Razavi-bench
 
-This repository extracts the question-answer assessments from Behzad Razavi's
-`Analog Design Experiments With AI` Part 1 and Part 2 articles into an
-rtl-forge-style one-task-per-directory layout.
+![Razavi-bench model comparison](docs/assets/razavi_3rollout_model_rows.png)
 
-Layout:
+Razavi-bench is a compact analog-design reasoning benchmark derived from
+Behzad Razavi's *Analog Design Experiments With AI* Part 1 and Part 2 articles.
+It packages the article questions into a clean one-task-per-directory layout for
+evaluating whether a model can reason about MOS devices, small-signal circuits,
+feedback, oscillators, comparators, dividers, LNAs, TIAs, and LC oscillators.
+
+The benchmark keeps only the task prompt, figure, and curated golden answer.
+The historical ChatGPT/Gemini responses and their article scores are not stored
+as task data.
+
+## Dataset
+
+- 50 total tasks
+- Part 1: 30 questions, article numbering Q1-Q30
+- Part 2: 20 questions, article numbering Q1-Q20
+- 44 task figures, stored directly beside each corresponding prompt
+- No `task.toml` files
+- No source PDFs in the repository
+
+## Layout
 
 ```text
-tasks/<part>-<number>-<slug>/
+tasks/<part>-<number>-<semantic-slug>/
   instruction.md
   golden_solution.md
-  figure-xx.png  # when the question has a figure
+  figure-xx.png  # only when the question has a figure
 ```
 
+Top-level files:
 
-Solution files:
+- `manifest.json` and `manifest.jsonl`: task index.
+- `evaluation_rubric.md`: inferred 0-4 grading rubric summarized from Razavi's comments and scores.
+- `verification/`: human audit notes and representative simulation checks used while curating the golden answers.
 
-- `golden_solution.md` contains the standard answer written for benchmark evaluation.
-- Historical ChatGPT/Gemini answers from the articles are intentionally not stored in task directories.
-- Figure PNGs, when present, live directly beside `instruction.md`.
+## Task Format
 
-Counts from the parsed source PDFs:
+Each `instruction.md` contains only the benchmark prompt and any local figure
+reference. It intentionally does not include source metadata, original model
+answers, scores, or explanations.
 
-- Part 1: 30 questions (article numbering Q1-Q30).
-- Part 2: 20 questions (article numbering Q1-Q20).
+Each `golden_solution.md` contains the expected reasoning and answer for
+evaluation. These were reviewed against the source articles, figures, and
+circuit analysis.
 
-Note: the user request mentioned 40 questions for Part 1, but the available
-Part 1 PDF contains Q1 through Q30. No synthetic questions were added.
+## Review Status
 
-Evaluation guidance:
+The golden answers have been reviewed task by task. The review record is in:
 
-- See `evaluation_rubric.md` for the inferred 0-4 grading rubric. The rubric is
-  summarized from Razavi's comments and scores in the source articles; it is not
-  a verbatim per-point rubric published in the articles.
+```text
+verification/golden_solution_review.md
+```
 
-Verification notes:
+Representative ngspice/Sky130 checks are recorded in:
 
-- `verification/sky130_ngspice/summary.md` records representative ngspice checks run with a local volare Sky130A PDK. These checks validate selected device and trend claims; they are not a complete one-netlist-per-task proof.
+```text
+verification/sky130_ngspice/summary.md
+```
+
+Those simulations validate selected device and trend claims. They are not meant
+to be a one-netlist-per-task proof, because many questions are topology,
+feedback, or conceptual reasoning tasks without specified sizes and biases.
+
+## Notes
+
+The user request originally mentioned 40 questions for Part 1, but the available
+Part 1 article contains Q1 through Q30. No synthetic questions were added.
