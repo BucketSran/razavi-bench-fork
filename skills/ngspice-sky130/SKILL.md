@@ -1,13 +1,13 @@
 ---
 name: ngspice-sky130
-description: "Use ngspice with the Razavi-Bench Sky130 model bundle for small analog-circuit probes. Provides minimal, reusable workflows for operating-point checks, small-signal parameter extraction, and simple AC/transient sanity tests. Use as supporting evidence only; final answers must still be analog-circuit reasoning."
+description: "Use ngspice with the Razavi-Bench Sky130 model bundle when a task has a concrete quantity worth probing. Provides workflows for operating-point checks, small-signal extraction, and simple AC/transient sanity tests. Use simulation selectively as evidence; final answers must be driven by analog-circuit reasoning and stated assumptions."
 ---
 
 # Sky130 Ngspice Skill
 
-Use this skill when a Razavi-Bench task benefits from checking a circuit intuition with ngspice and the bundled Sky130 1.8 V primitive models.
+Use this skill when a Razavi-Bench task benefits from checking a circuit intuition with ngspice and the bundled Sky130 1.8 V primitive models. You are not required to simulate every task. Use ngspice when it can answer a clearly stated electrical question; skip it when the task is mainly conceptual, topological, or under-specified.
 
-Do not treat simulation as the answer. Many tasks are qualitative, depend on small-signal assumptions, or omit exact device sizes and bias points. A simulation is useful only if the deck topology, bias condition, device sizes, and measured quantity match the question you are answering.
+Do not treat simulation as the answer. Many tasks are qualitative, depend on small-signal assumptions, or omit exact device sizes and bias points. A simulation is useful only if the deck topology, held-fixed condition, bias condition, device sizes, and measured quantity match the question you are answering. If a Sky130 simulation conflicts with a textbook trend, first check whether you changed the assumptions.
 
 ## Environment
 
@@ -41,23 +41,42 @@ assets/
 
 The standard examples write generated decks and logs to `./ngspice_outputs/` by default, or to `$SKY130_NGSPICE_OUTPUT_DIR` if set. Treat these as scratch artifacts. Do not edit files under `.claude/skills` unless the user is improving the skill itself; copy a generated deck into `/app` before adapting it for a task.
 
-## Minimal Workflow
+## Decision Workflow
+
+Before running ngspice, write down the intended use of simulation in one sentence:
+
+```text
+I will simulate <quantity/trend> while holding <condition> fixed, because the task asks about <same condition>.
+```
+
+If you cannot fill in that sentence honestly, do not simulate. Answer from analog reasoning and state the missing information.
+
+Use this order:
 
 1. Read `/app/instruction.md` and inspect any PNGs in `/app`.
-2. Decide what the simulation is supposed to test: operating point, sign, trend, pole, gain, or impedance.
-3. Create a new deck under `/app`, or copy an example from `/tools/ngspice-sky130/examples`.
-4. Check that the deck matches the question. Do not blindly reuse example topology, sizes, or bias.
-5. Run:
+2. Identify the intended analysis assumption: long-channel vs. PDK device, fixed current vs. fixed voltage/overdrive, fixed geometry ratio vs. fixed width/length, small-signal vs. large-signal, open-loop vs. feedback.
+3. Decide whether ngspice can test the same assumption.
+4. If yes, run a minimal deck and use the result as supporting evidence.
+5. If no, skip simulation and give the analog-circuit answer directly.
+
+Do not run a generic MOS probe merely because this skill is available. A generic probe is useful only to learn syntax or to check the simulator installation; it is not evidence for an unrelated task.
+
+## Minimal Simulation Workflow
+
+1. Decide what the simulation is supposed to test: operating point, sign, trend, pole, gain, impedance, or switch resistance.
+2. Create a new deck under `/app`, or copy an example from `/tools/ngspice-sky130/examples`.
+3. Check that the deck matches the question. Do not blindly reuse example topology, sizes, bias, or held-fixed conditions.
+4. Run:
 
 ```bash
 ngspice -b /app/your_deck.cir > /app/your_deck.log 2>&1
 ```
 
-6. Read the log, then write only the final reasoning to `/app/answer.md`.
+5. Read the log, compare it against the theoretical mechanism, then write only the final reasoning to `/app/answer.md`.
 
 ## Zero-Start Quickstart
 
-If you have never used ngspice in this environment, do this first:
+If you have never used ngspice in this environment and the task appears simulation-suitable, do this first:
 
 ```bash
 ls -la /app
@@ -66,7 +85,7 @@ ls -la /tools/ngspice-sky130/examples
 ngspice --version
 ```
 
-Then run a known-good probe:
+You may run a known-good probe to learn syntax:
 
 ```bash
 python3 /app/.claude/skills/ngspice-sky130/assets/run_op_probe.py \
@@ -77,13 +96,13 @@ sed -n '1,120p' /app/nfet_op.cir
 sed -n '1,160p' /app/nfet_op.log
 ```
 
-This teaches the three essential pieces:
+This teaches the three essential pieces, but it is not task evidence unless the task is actually an NMOS operating-point probe:
 
 - a deck includes `sky130.lib.spice`;
 - the transistor instance name `Xn` maps to ngspice operating-point variables such as `@m.xn.msky130_fd_pr__nfet_01v8[gm]`;
 - `.control ... print ... .endc` prints values into the log.
 
-After that, copy the closest generated deck and change only what the question requires.
+After that, copy the closest generated deck and change only what the question requires. If no generated deck matches the task topology and assumptions, do not force it.
 
 Available helper templates:
 
@@ -123,7 +142,7 @@ tgate_ron
 
 ## Choosing A Probe
 
-Before writing a deck, classify the task. Use ngspice only when the task has a concrete electrical quantity that can be probed under a stated bias condition.
+Before writing a deck, classify the task. Use ngspice only when the task has a concrete electrical quantity that can be probed under a stated bias condition and a clear held-fixed condition.
 
 | Question type | Useful probe | Avoid |
 | --- | --- | --- |
@@ -132,8 +151,9 @@ Before writing a deck, classify the task. Use ngspice only when the task has a c
 | Input/output resistance | inject a small test current or voltage source and compute `v/i` | measuring the wrong port or leaving independent sources active incorrectly |
 | Capacitance, pole, speed, or phase-noise trend | use simulation only as a sanity check for sign/trend after deriving the mechanism | pretending Sky130 short-channel numbers are the textbook answer |
 | Feedback interpretation, latch topology, oscillation condition, qualitative “why” questions | usually answer from analog reasoning directly | forcing a simulation without a complete transient setup |
+| Textbook MOS scaling, intrinsic gain, gm trends | reason from the stated square-law or small-signal assumptions first; simulate only if the task explicitly asks for a PDK/device example | letting one fixed-bias Sky130/BSIM4 result override a long-channel or held-current/held-overdrive conclusion |
 
-If the figure or prompt omits sizes, loads, bias currents, clock waveforms, or initial conditions, state the missing assumption. A simulation with invented values can support a trend, but it cannot replace the reasoning.
+If the figure or prompt omits sizes, loads, bias currents, clock waveforms, or initial conditions, state the missing assumption. A simulation with invented values can support a trend, but it cannot replace the reasoning. If different reasonable assumptions give different answers, say so.
 
 ## Common Checks
 
@@ -169,6 +189,7 @@ Sanity checks before trusting a result:
 - Is the device in the intended region? Check `vds`, `vgs`, threshold, and `vdsat` when possible.
 - Are you holding the same quantity fixed as the question? For example, fixed overdrive, fixed current, fixed geometry ratio, and fixed VGS can produce different trends.
 - Are the model limits relevant? A Sky130 short-channel simulation may disagree with a long-channel textbook assumption.
+- Is the result a model artifact or bias artifact? If the result is surprising, rerun with a second bias or derive the expected trend before trusting it.
 - Does the sign convention match the circuit? PMOS and NMOS signs can look different while the small-signal form is equivalent.
 - Does the question provide enough numerical detail for simulation? If not, state the assumption and use simulation only as a qualitative sanity check.
 - Did the deck answer the same question? A common-source example does not answer a source-follower question; a fixed-`VGS` sweep does not answer a fixed-current design question.
@@ -181,6 +202,7 @@ Skip simulation, or treat it only as secondary evidence, when:
 - the figure lacks enough device sizes, loads, or bias points;
 - the intended answer is a long-channel textbook trend;
 - the question asks about sign conventions, model form, or feedback interpretation.
+- you would need to invent most of the circuit, bias, or waveform details.
 
 In these cases, write the analog reasoning directly and mention any assumptions.
 
