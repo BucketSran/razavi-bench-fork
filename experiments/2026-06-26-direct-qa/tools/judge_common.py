@@ -225,6 +225,10 @@ def load_source_records(experiment_dir: Path, args: argparse.Namespace) -> list[
     return records[: args.limit] if args.limit else records
 
 
+def has_record_filter(args: argparse.Namespace) -> bool:
+    return bool(args.task_slug or args.model_family or args.rollout or args.limit)
+
+
 async def run_judge(args: argparse.Namespace, chat_fn: Callable[[str, str, list[dict], int], str], api_env: str) -> None:
     repo = Path(args.repo).resolve()
     experiment_dir = repo / "experiments" / EXPERIMENT
@@ -239,15 +243,28 @@ async def run_judge(args: argparse.Namespace, chat_fn: Callable[[str, str, list[
     if not source_records:
         raise SystemExit("No source records matched the requested filters")
     output_path = output_dir / f"{args.output_name}.jsonl"
-    rows = existing_success_rows(output_path) if args.resume else []
-    done = {score_key(row) for row in rows}
-    pending_records = [record for record in source_records if source_key(record) not in done]
+    if args.refresh_matched and not has_record_filter(args):
+        raise SystemExit("--refresh-matched requires at least one task/model/rollout/limit filter")
+
+    rows = existing_success_rows(output_path) if (args.resume or args.refresh_matched) else []
+    source_keys = {source_key(record) for record in source_records}
+    if args.refresh_matched:
+        before_count = len(rows)
+        rows = [row for row in rows if score_key(row) not in source_keys]
+        removed_count = before_count - len(rows)
+        pending_records = source_records
+        print(f"refreshing {len(pending_records)} matched records; removed {removed_count} existing rows", flush=True)
+    else:
+        done = {score_key(row) for row in rows}
+        pending_records = [record for record in source_records if source_key(record) not in done]
 
     sem = asyncio.Semaphore(args.concurrency)
     rows_lock = asyncio.Lock()
-    total = len(source_records)
+    pending_total = len(pending_records)
+    completed = 0
 
     async def score_one(record: dict) -> None:
+        nonlocal completed
         golden_path = repo / record["task_path"] / "golden_solution.md"
         golden = golden_path.read_text(encoding="utf-8")
         prompt = build_prompt(record, rubric, golden)
@@ -271,10 +288,11 @@ async def run_judge(args: argparse.Namespace, chat_fn: Callable[[str, str, list[
         )
         async with rows_lock:
             rows.append(score_record)
-            if len(rows) % args.flush_every == 0:
+            completed += 1
+            if completed % args.flush_every == 0:
                 write_jsonl(output_path, rows)
-            if len(rows) % args.progress_every == 0 or len(rows) == total:
-                print(f"{len(rows)}/{total} written", flush=True)
+            if completed % args.progress_every == 0 or completed == pending_total:
+                print(f"{completed}/{pending_total} scored; rows={len(rows)}", flush=True)
 
     await asyncio.gather(*(score_one(record) for record in pending_records))
     rows.sort(key=lambda row: (
@@ -321,3 +339,11 @@ def add_common_args(
         help="Score only this rollout number. May be repeated.",
     )
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--refresh-matched",
+        action="store_true",
+        help=(
+            "Load the existing output JSONL, remove rows selected by the current "
+            "filters, re-score those rows, and write the merged JSONL back."
+        ),
+    )

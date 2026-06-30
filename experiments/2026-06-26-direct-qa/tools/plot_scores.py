@@ -8,7 +8,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 from matplotlib.colors import to_rgba
+from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle
+from matplotlib.textpath import TextPath
 
 
 DEFAULT_EXPERIMENT_DIR = Path(__file__).resolve().parents[1]
@@ -186,6 +188,39 @@ def available_font(candidates: list[str]) -> str:
     return FALLBACK_FONT
 
 
+def text_width_fraction(text: str, font_family: str, size: float, weight: str, fig: plt.Figure) -> float:
+    properties = FontProperties(family=font_family, size=size, weight=weight)
+    width_points = TextPath((0, 0), text, prop=properties).get_extents().width
+    return width_points / (fig.get_figwidth() * 72)
+
+
+def draw_bullet_parts(
+    ax: plt.Axes,
+    fig: plt.Figure,
+    x: float,
+    y: float,
+    parts: list[tuple[str, str]],
+    font_family: str,
+) -> None:
+    current_x = x
+    for text, weight in parts:
+        display_text = text.rstrip()
+        ax.text(
+            current_x,
+            y,
+            display_text,
+            ha="left",
+            va="top",
+            fontsize=14,
+            fontfamily=font_family,
+            fontweight=weight,
+            color="#5B6472",
+        )
+        current_x += text_width_fraction(display_text, font_family, 14, weight, fig)
+        if display_text != text:
+            current_x += 0.006
+
+
 def source_run_count(rows: list[dict], judge: str) -> int:
     for row in rows:
         if row["judge_family"] == judge:
@@ -239,8 +274,12 @@ def plot_scores_for_judge(
     )
 
     run_count = source_run_count(rows, judge)
-    bullets = [
-        f"Judge model: {JUDGE_LABELS[judge]}; scores average {run_count} judge passes per answer.",
+    bullets: list[str | list[tuple[str, str]]] = [
+        [
+            ("Judge model: ", "regular"),
+            (JUDGE_LABELS[judge], "semibold"),
+            (f"; scores average {run_count} judge passes per answer.", "regular"),
+        ],
         "Bars show three-rollout means for Overall, Part 1 (30 questions), and Part 2 (20 questions).",
         "Black lines show rollout min-to-max; colored dots show rollout 1/2/3 on the same metric row.",
     ]
@@ -249,7 +288,10 @@ def plot_scores_for_judge(
     for i, text in enumerate(bullets):
         y = bullet_y0 - i * bullet_gap
         ax.text(outer_l, y, "•", ha="left", va="top", fontsize=14, color="#5B6472")
-        ax.text(outer_l + 0.018, y, text, ha="left", va="top", fontsize=14, color="#5B6472")
+        if isinstance(text, list):
+            draw_bullet_parts(ax, fig, outer_l + 0.018, y, text, body_font)
+        else:
+            ax.text(outer_l + 0.018, y, text, ha="left", va="top", fontsize=14, color="#5B6472")
 
     ax.add_patch(
         Rectangle(
