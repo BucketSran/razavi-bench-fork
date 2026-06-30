@@ -1,0 +1,5 @@
+left_run,right_run,n,exact_agreement,exact_agreement_percent,within_1,within_1_percent,right_minus_left_avg_score_0_to_4,right_minus_left_avg_percent,abs_diff_distribution
+minimax-m3-20260630-120035,minimax-m3-20260630-123355,450,344,76.4444,441,98.0,-0.073333,-1.8333,"{""0"": 344, ""1"": 97, ""2"": 9}"
+deepseek-v4-pro-20260630-121054,deepseek-v4-pro-20260630-123714,450,426,94.6667,447,99.3333,-0.011111,-0.2778,"{""0"": 426, ""1"": 21, ""2"": 3}"
+minimax-m3-20260630-120035,deepseek-v4-pro-20260630-121054,450,242,53.7778,434,96.4444,-0.182222,-4.5556,"{""0"": 242, ""1"": 192, ""2"": 16}"
+minimax-m3-20260630-123355,deepseek-v4-pro-20260630-123714,450,259,57.5556,437,97.1111,-0.12,-3.0,"{""0"": 259, ""1"": 178, ""2"": 13}"

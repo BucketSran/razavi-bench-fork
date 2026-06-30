@@ -1,0 +1,24 @@
+Razavi-Bench Notice
+
+Razavi-Bench is derived from the following source articles:
+
+- Behzad Razavi, "Analog Design Experiments With AI--Part 1 [The Analog
+  Mind]," IEEE Solid-State Circuits Magazine, vol. 17, no. 4, pp. 11-15,
+  Fall 2025.
+- Behzad Razavi, "Analog Design Experiments With AI--Part 2 [The Analog
+  Mind]," IEEE Solid-State Circuits Magazine, vol. 18, no. 2, pp. 8-13,
+  Spring 2026.
+
+The benchmark questions and related materials are included or adapted with
+permission from Behzad Razavi. Original article, question, and figure
+copyrights remain with their respective rights holders, including Behzad
+Razavi and/or IEEE, as applicable.
+
+Zhang Tuoken curated the benchmark structure, task metadata, cleaned
+transcripts, score tables, evaluation packaging, and associated documentation.
+Those curation and dataset-organization contributions are licensed under CC
+BY 4.0 as described in LICENSE.
+
+AI model responses are reproduced as research artifacts for transparency,
+comparison, and independent re-grading. They do not represent endorsement by
+Behzad Razavi, IEEE, OpenAI, Google, Anthropic, or any other model provider.

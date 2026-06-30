@@ -16,9 +16,9 @@ one-task-per-directory benchmark. The tasks probe whether a model can reason
 about MOS devices, small-signal circuits, feedback, oscillators, comparators,
 dividers, LNAs, TIAs, and LC oscillators.
 
-The repository keeps only the prompt, figure, and curated golden answer for each
-task. The historical ChatGPT/Gemini responses and their article scores are not
-stored as task data.
+Each task directory keeps only the benchmark prompt, figure, and curated golden
+answer. Cleaned public AI model outputs are stored separately under
+`experiments/` so the task definitions remain independent from any model run.
 
 ## At a Glance
 
@@ -44,7 +44,12 @@ Top-level files:
 | Path | Purpose |
 |---|---|
 | `manifest.json` | Machine-readable task index |
-| `evaluation_rubric.md` | Inferred 0-4 grading rubric from Razavi's comments and scores |
+| `evaluation_rubric.md` | 0-4 evaluation guide used by judge scripts |
+| `experiments/` | Cleaned model outputs and per-experiment metadata |
+| `tools/` | Reproducible judge scripts for scoring model outputs |
+| `LICENSE` | Dataset and documentation license terms |
+| `LICENSE-CODE` | MIT license for code |
+| `NOTICE` | Source article, permission, and third-party rights notice |
 
 ## Task Format
 
@@ -55,6 +60,35 @@ scores, and explanatory commentary.
 Each `golden_solution.md` contains the expected reasoning and final answer for
 evaluation. The golden answers were reviewed against the source articles,
 figures, and circuit analysis.
+
+## Experiments
+
+`experiments/` contains cleaned model outputs and per-experiment metadata. The
+`2026-06-26-direct-qa` experiment includes GPT, Gemini, and Claude
+question-answer pairs from the direct-mm-v4-newgolden benchmark release. The
+public files exclude system prompts, process
+instructions, hidden reasoning, Vela session IDs, provider metadata, token/cost
+data, and internal record IDs.
+
+Automated judge scores, when present, are experiment metadata for transparency
+and re-grading. They are not a substitute for independent expert review, and
+new judge runs can be added if the rubric or golden answers change.
+
+The judge scripts in `tools/` read API keys from environment variables or
+interactive input. They do not store credentials in the repository.
+
+## License And Notice
+
+The benchmark includes or adapts source questions and figures from Behzad
+Razavi's *Analog Design Experiments With AI* articles with permission from
+Behzad Razavi. Original article, question, and figure copyrights remain with
+their respective rights holders, including Behzad Razavi and/or IEEE, as
+applicable.
+
+Dataset curation, cleaned transcripts, score tables, metadata, and documentation
+are licensed under CC BY 4.0 as described in `LICENSE`. Code is licensed under
+the MIT License in `LICENSE-CODE`. See `NOTICE` for source and permission
+details.
 
 ## Notes
 

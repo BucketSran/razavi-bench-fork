@@ -50,7 +50,3 @@ For evaluating a new model response:
 3. Prefer correctness of analog reasoning over surface similarity to the original AI answer.
 4. Penalize answers that reach the right final word for the wrong physical reason when that reason would mislead design decisions.
 5. Award partial credit when the response identifies a real mechanism but misses another mechanism that changes the conclusion.
-
-## Caveat
-
-This rubric is inferred from the articles. Razavi did not publish a formal grading table that defines every score level. Borderline cases should be judged by expert analog-circuit reasoning and by consistency with the examples in the source articles.
