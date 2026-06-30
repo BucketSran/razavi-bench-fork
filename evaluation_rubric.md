@@ -1,52 +1,27 @@
 # Evaluation Rubric
 
-This benchmark is derived from Behzad Razavi's *Analog Design Experiments With AI* articles. The source articles provide each AI response, Razavi's comments, and a 0-4 score for that response, but they do not define a detailed per-point grading rubric.
+The source Razavi articles provide AI responses, Razavi's comments, and 0-4
+scores, but not a detailed per-point grading table. This file is an inferred
+evaluation guide for re-scoring new model answers.
 
-The rubric below is an inferred evaluator guide, summarized from the pattern of Razavi's comments and scores across the 50 questions. It should be used as guidance for evaluating new answers, not as a verbatim rule stated in the articles.
+## Scale
 
-## Scoring Scale
-
-| Score | Meaning | Typical Criteria |
+| Score | Meaning | Criteria |
 |---:|---|---|
-| 4 | Correct | The answer matches the correct circuit behavior. The topology, device roles, dominant mechanism, trend, and any key formula or boundary condition are correct. A concise answer can receive full credit if the essential reasoning is right. |
-| 3 | Mostly correct | The main conclusion is correct, but the answer has a minor flaw: an imprecise attribution, an unnecessary or inconsistent modeling detail, a small parasitic-location mistake, or an incomplete explanation that does not overturn the main result. |
-| 2 | Partially correct | The answer captures some relevant mechanism or analysis framework, but misses an important circuit detail, trend, topology implication, or design consequence. It is not reliable as a complete answer. |
-| 1 | Mostly incorrect | The final conclusion or main trend is wrong, but the answer shows a small amount of relevant understanding, such as identifying one local effect, one device role, or one partially applicable idea. |
-| 0 | Incorrect or unusable | The answer is fundamentally wrong. Common causes include misidentifying NMOS/PMOS devices, misunderstanding circuit connections, missing a feedback path, classifying the topology incorrectly, giving internally inconsistent reasoning, or dismissing a valid circuit instead of analyzing it. |
+| 4 | Correct | Correct conclusion and reasoning; topology, device roles, dominant mechanism, trend, and key assumptions are right. |
+| 3 | Mostly correct | Main conclusion is right, with a minor omission, imprecision, or modeling flaw that does not change the result. |
+| 2 | Partially correct | Identifies some relevant mechanism, but misses an important circuit detail, trend, or design consequence. |
+| 1 | Mostly incorrect | Main conclusion is wrong, but the answer contains a small amount of relevant circuit understanding. |
+| 0 | Incorrect or unusable | Fundamentally wrong, internally inconsistent, or based on a mistaken topology/device/connection. |
 
-## What Razavi Appears to Reward
+## Guidance
 
-Razavi's scoring emphasizes analog-design judgment, not just algebraic manipulation. A good answer should:
+Evaluate against the task's `golden_solution.md`, prioritizing analog-circuit
+reasoning over surface similarity to the original article answer. Reward correct
+identification of device types, signal paths, feedback, loading, dominant
+mechanisms, and valid boundary conditions. Penalize memorized formulas used
+outside their assumptions, wrong topology recognition, missed shorts or
+connections, and right final claims supported by misleading physical reasoning.
 
-- Identify device types and terminal connections correctly.
-- Recognize the circuit topology and signal path.
-- Notice feedback paths, shorts, bias constraints, and loading effects.
-- Predict the correct qualitative trend when a parameter changes.
-- Explain the dominant physical mechanism behind the trend.
-- Use formulas only when their assumptions match the circuit.
-- State important boundary conditions, such as constant overdrive, saturation, oscillation condition, load dominance, or large-signal switching behavior.
-- Avoid design-misleading conclusions, even if some local calculation looks plausible.
-
-## Common Failure Modes
-
-The original AI answers often lose credit for these reasons:
-
-- Confusing PMOS and NMOS symbols.
-- Treating a source follower, common-gate stage, cascode, inverter, or feedback structure as the wrong topology.
-- Ignoring a short, gate connection, source connection, or feedback loop.
-- Applying a memorized formula without checking whether its assumptions hold.
-- Predicting the wrong performance trend because capacitance, transconductance, resistance, or switching behavior is considered in isolation.
-- Missing large-signal behavior in oscillators, latches, and dividers.
-- Giving an answer that discourages a useful circuit exploration because the circuit was misunderstood.
-
-## Recommended Use in This Benchmark
-
-Do not store Razavi's original numeric scores inside individual task files. They were scores for the historical ChatGPT/Gemini responses in the articles, not labels that should be exposed to models solving the benchmark.
-
-For evaluating a new model response:
-
-1. Compare the response against the task's `golden_solution.md`, especially Razavi's comment and corrected reasoning.
-2. Assign 0-4 using the inferred scale above.
-3. Prefer correctness of analog reasoning over surface similarity to the original AI answer.
-4. Penalize answers that reach the right final word for the wrong physical reason when that reason would mislead design decisions.
-5. Award partial credit when the response identifies a real mechanism but misses another mechanism that changes the conclusion.
+Do not treat Razavi's historical scores for article responses as hidden labels
+for new model answers. They are examples used to infer this guide.

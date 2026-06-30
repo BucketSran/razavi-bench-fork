@@ -43,7 +43,6 @@ Top-level files:
 
 | Path | Purpose |
 |---|---|
-| `manifest.json` | Machine-readable task index |
 | `evaluation_rubric.md` | 0-4 evaluation guide used by judge scripts |
 | `experiments/` | Cleaned model outputs and per-experiment metadata |
 | `tools/` | Reproducible judge scripts for scoring model outputs |
