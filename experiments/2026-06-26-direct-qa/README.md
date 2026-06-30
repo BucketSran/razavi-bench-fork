@@ -45,4 +45,18 @@ per-answer scores and rationales are needed.
 The judge scripts read API keys from environment variables or interactive input.
 They do not store credentials in the repository.
 
+Examples:
+
+```bash
+python3 experiments/2026-06-26-direct-qa/tools/run_minimax_judge.py \
+  --output-name minimax-m3-part1-001 \
+  --task-slug part1-001-double-length-and-width-mosfet-its-intrinsic
+
+python3 experiments/2026-06-26-direct-qa/tools/run_deepseek_judge.py \
+  --output-name deepseek-gpt-r1-part1-001 \
+  --task-slug part1-001-double-length-and-width-mosfet-its-intrinsic \
+  --model-family gpt \
+  --rollout 1
+```
+
 See `../../LICENSE` for dataset, code, and source-material terms.

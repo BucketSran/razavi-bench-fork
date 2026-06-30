@@ -206,12 +206,23 @@ def build_score_record(
     }
 
 
-def load_source_records(experiment_dir: Path, limit: int) -> list[dict]:
+def matches_record_filters(record: dict, args: argparse.Namespace) -> bool:
+    if args.task_slug and record["task_slug"] not in set(args.task_slug):
+        return False
+    if args.model_family and record["model_family"] not in set(args.model_family):
+        return False
+    if args.rollout and int(record["rollout"]) not in set(args.rollout):
+        return False
+    return True
+
+
+def load_source_records(experiment_dir: Path, args: argparse.Namespace) -> list[dict]:
     records = []
     model_output_dir = experiment_dir / "model_outputs"
     for path in sorted(model_output_dir.glob(MODEL_OUTPUT_PATTERN)):
         records.extend(load_jsonl(path))
-    return records[:limit] if limit else records
+    records = [record for record in records if matches_record_filters(record, args)]
+    return records[: args.limit] if args.limit else records
 
 
 async def run_judge(args: argparse.Namespace, chat_fn: Callable[[str, str, list[dict], int], str], api_env: str) -> None:
@@ -224,7 +235,9 @@ async def run_judge(args: argparse.Namespace, chat_fn: Callable[[str, str, list[
     if not api_key.strip():
         raise SystemExit(f"{api_env} is required")
 
-    source_records = load_source_records(experiment_dir, args.limit)
+    source_records = load_source_records(experiment_dir, args)
+    if not source_records:
+        raise SystemExit("No source records matched the requested filters")
     output_path = output_dir / f"{args.output_name}.jsonl"
     rows = existing_success_rows(output_path) if args.resume else []
     done = {score_key(row) for row in rows}
@@ -291,4 +304,20 @@ def add_common_args(
     parser.add_argument("--progress-every", type=int, default=25)
     parser.add_argument("--max-retries", type=int, default=5)
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument(
+        "--task-slug",
+        action="append",
+        help="Score only this task slug. May be repeated.",
+    )
+    parser.add_argument(
+        "--model-family",
+        action="append",
+        help="Score only this answer model family, such as gpt, gemini, or claude. May be repeated.",
+    )
+    parser.add_argument(
+        "--rollout",
+        action="append",
+        type=int,
+        help="Score only this rollout number. May be repeated.",
+    )
     parser.add_argument("--resume", action="store_true")
