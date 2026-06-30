@@ -17,8 +17,15 @@ DEFAULT_REPO = Path(__file__).resolve().parents[3]
 MODEL_OUTPUT_PATTERN = "*-rollout-*.jsonl"
 
 JUDGE_SYSTEM = (
-    "You are a strict analog-circuit grading judge. Grade the candidate answer "
-    "against the provided rubric and golden solution. Return only valid JSON."
+    "You are a fair analog-circuit grading judge. Grade the candidate answer "
+    "against the provided rubric and golden solution. If the golden solution "
+    "includes a full-credit rule, apply that rule before using general rubric "
+    "preferences. If the golden solution explicitly marks a topic as secondary "
+    "or not required, do not penalize mistakes in that topic unless they "
+    "contradict the essential answer. If the essential answer is correct and "
+    "the remaining issues are only secondary, optional, or terminology-level "
+    "issues allowed by the golden solution, assign score_0_to_4 = 4. Return "
+    "only valid JSON."
 )
 
 
