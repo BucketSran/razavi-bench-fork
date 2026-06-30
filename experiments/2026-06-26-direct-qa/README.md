@@ -34,5 +34,4 @@ to the rubric and golden answers used at judge time. If the rubric or golden
 answers change, add a new judge result artifact under this experiment rather
 than modifying the cleaned model-output files.
 
-See `../../LICENSE`, `../../LICENSE-CODE`, and `../../NOTICE` for dataset, code,
-and source-material notices.
+See `../../LICENSE` for dataset, code, and source-material terms.

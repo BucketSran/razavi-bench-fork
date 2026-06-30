@@ -47,9 +47,7 @@ Top-level files:
 | `evaluation_rubric.md` | 0-4 evaluation guide used by judge scripts |
 | `experiments/` | Cleaned model outputs and per-experiment metadata |
 | `tools/` | Reproducible judge scripts for scoring model outputs |
-| `LICENSE` | Dataset and documentation license terms |
-| `LICENSE-CODE` | MIT license for code |
-| `NOTICE` | Source article, permission, and third-party rights notice |
+| `LICENSE` | License, source, and permission terms |
 
 ## Task Format
 
@@ -77,7 +75,7 @@ new judge runs can be added if the rubric or golden answers change.
 The judge scripts in `tools/` read API keys from environment variables or
 interactive input. They do not store credentials in the repository.
 
-## License And Notice
+## License
 
 The benchmark includes or adapts source questions and figures from Behzad
 Razavi's *Analog Design Experiments With AI* articles with permission from
@@ -87,8 +85,7 @@ applicable.
 
 Dataset curation, cleaned transcripts, score tables, metadata, and documentation
 are licensed under CC BY 4.0 as described in `LICENSE`. Code is licensed under
-the MIT License in `LICENSE-CODE`. See `NOTICE` for source and permission
-details.
+the MIT License in `LICENSE`.
 
 ## Notes
 
