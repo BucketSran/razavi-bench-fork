@@ -14,7 +14,7 @@ from typing import Callable
 
 EXPERIMENT = "2026-06-26-direct-qa"
 DEFAULT_REPO = Path(__file__).resolve().parents[3]
-MODEL_FILES = ("gpt.jsonl", "gemini.jsonl", "claude.jsonl")
+MODEL_OUTPUT_PATTERN = "*-rollout-*.jsonl"
 
 JUDGE_SYSTEM = (
     "You are a strict analog-circuit grading judge. Grade the candidate answer "
@@ -208,15 +208,16 @@ def build_score_record(
 
 def load_source_records(experiment_dir: Path, limit: int) -> list[dict]:
     records = []
-    for name in MODEL_FILES:
-        records.extend(load_jsonl(experiment_dir / name))
+    model_output_dir = experiment_dir / "model_outputs"
+    for path in sorted(model_output_dir.glob(MODEL_OUTPUT_PATTERN)):
+        records.extend(load_jsonl(path))
     return records[:limit] if limit else records
 
 
 async def run_judge(args: argparse.Namespace, chat_fn: Callable[[str, str, list[dict], int], str], api_env: str) -> None:
     repo = Path(args.repo).resolve()
     experiment_dir = repo / "experiments" / EXPERIMENT
-    output_dir = experiment_dir / "judge_scores"
+    output_dir = experiment_dir / "judge_outputs"
     rubric = (repo / "evaluation_rubric.md").read_text(encoding="utf-8")
     rubric_hash = sha256_text(rubric)
     api_key = os.environ.get(api_env) or getpass.getpass(f"{api_env}: ")
