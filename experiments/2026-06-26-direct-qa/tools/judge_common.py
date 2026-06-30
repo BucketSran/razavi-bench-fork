@@ -13,7 +13,7 @@ from typing import Callable
 
 
 EXPERIMENT = "2026-06-26-direct-qa"
-DEFAULT_REPO = Path(__file__).resolve().parents[1]
+DEFAULT_REPO = Path(__file__).resolve().parents[3]
 MODEL_FILES = ("gpt.jsonl", "gemini.jsonl", "claude.jsonl")
 
 JUDGE_SYSTEM = (

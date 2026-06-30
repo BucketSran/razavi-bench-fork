@@ -45,7 +45,6 @@ Top-level files:
 |---|---|
 | `evaluation_rubric.md` | 0-4 evaluation guide used by judge scripts |
 | `experiments/` | Cleaned model outputs and per-experiment metadata |
-| `tools/` | Reproducible judge scripts for scoring model outputs |
 | `LICENSE` | License, source, and permission terms |
 
 ## Task Format
@@ -68,11 +67,9 @@ instructions, hidden reasoning, Vela session IDs, provider metadata, token/cost
 data, and internal record IDs.
 
 Automated judge scores, when present, are experiment metadata for transparency
-and re-grading. They are not a substitute for independent expert review, and
-new judge runs can be added if the rubric or golden answers change.
-
-The judge scripts in `tools/` read API keys from environment variables or
-interactive input. They do not store credentials in the repository.
+and re-grading. They are not a substitute for independent expert review.
+Experiment-specific scoring scripts live with the experiment that produced the
+scores.
 
 ## License
 

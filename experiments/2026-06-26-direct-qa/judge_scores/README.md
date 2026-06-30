@@ -17,6 +17,9 @@ by:
 Each row stores the judge model, judge run date, rubric hash, golden-solution
 hash, score, and concise rationale.
 
+`summary.csv` is the derived aggregate table for reports and plots. The JSONL
+files remain the source of truth for per-answer scores and rationales.
+
 ## Files
 
 - `minimax-m3-20260630-120035.jsonl`: MiniMax-M3 judge scores for all 450
@@ -27,8 +30,4 @@ hash, score, and concise rationale.
   8192-token run.
 - `deepseek-v4-pro-20260630-123714.jsonl`: DeepSeek-V4-Pro judge scores from
   the later 8192-token run.
-- `judge_runs_manifest.csv`: judge run names, completion timestamps, and
-  available duration notes.
-- `judge_runs_summary.csv`: aggregate summary across all judge runs.
-- `judge_runs_pairwise_summary.csv`: pairwise agreement summary across judge
-  runs.
+- `summary.csv`: aggregate summary across all judge runs.

@@ -1,5 +1,0 @@
-judge_run,judge_model,completed_at_cst,duration_seconds,duration_note
-minimax-m3-20260630-120035,MiniMax-M3,2026-06-30 12:00:35,,not recorded precisely; this run included later resume repair
-deepseek-v4-pro-20260630-121054,deepseek-v4-pro,2026-06-30 12:10:54,,not recorded precisely
-minimax-m3-20260630-123355,MiniMax-M3,2026-06-30 12:33:55,248,observed wall time from API key submission to process exit
-deepseek-v4-pro-20260630-123714,deepseek-v4-pro,2026-06-30 12:37:14,150,observed wall time from API key submission to process exit

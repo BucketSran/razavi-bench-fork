@@ -17,6 +17,8 @@ experiment.
 - `gpt.jsonl`: GPT-5.5 Thinking XHigh, 3 rollouts, 150 records.
 - `gemini.jsonl`: Gemini 3.1 Pro CC Thinking High, 3 rollouts, 150 records.
 - `claude.jsonl`: Claude Opus 4.8 Thinking Max, 3 rollouts, 150 records.
+- `judge_scores/`: per-answer judge scores and `summary.csv`.
+- `tools/`: scripts used to generate the judge score JSONL files.
 
 Each line is one JSON object with the effective benchmark question, final
 visible model answer, run date, rollout number, answer round count, model call
@@ -33,5 +35,8 @@ Judge scores are stored separately under `judge_scores/` because they are tied
 to the rubric and golden answers used at judge time. If the rubric or golden
 answers change, add a new judge result artifact under this experiment rather
 than modifying the cleaned model-output files.
+
+The judge scripts read API keys from environment variables or interactive input.
+They do not store credentials in the repository.
 
 See `../../LICENSE` for dataset, code, and source-material terms.
