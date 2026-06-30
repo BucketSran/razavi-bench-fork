@@ -4,5 +4,5 @@ __pycache__/
 WORK/
 sources/
 *.pdf
-!docs/Analog_Design_Experiments_With_AIPart_1_The_Analog_Mind.pdf
-!docs/Analog_Design_Experiments_With_AIPart_2_The_Analog_Mind.pdf
+!docs/papers/Analog_Design_Experiments_With_AIPart_1_The_Analog_Mind.pdf
+!docs/papers/Analog_Design_Experiments_With_AIPart_2_The_Analog_Mind.pdf
