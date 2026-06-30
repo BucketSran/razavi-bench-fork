@@ -6,20 +6,24 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
+from matplotlib.colors import to_rgba
+from matplotlib.patches import Rectangle
 
 
 DEFAULT_EXPERIMENT_DIR = Path(__file__).resolve().parents[1]
 MODEL_ORDER = ["claude", "gemini", "gpt"]
 MODEL_LABELS = {
-    "claude": "Claude",
-    "gemini": "Gemini",
-    "gpt": "GPT",
+    "claude": ("Claude Opus 4.8", "Thinking Max"),
+    "gemini": ("Gemini 3.1 Pro", "Thinking High"),
+    "gpt": ("GPT-5.5", "Thinking XHigh"),
 }
 ROLLOUT_ORDER = [1, 2, 3]
 PART_ORDER = ["part1_first_30", "part2_last_20", "all"]
+PLOT_PART_ORDER = ["all", "part1_first_30", "part2_last_20"]
 PART_LABELS = {
-    "part1_first_30": "Part 1 (30 tasks)",
-    "part2_last_20": "Part 2 (20 tasks)",
+    "part1_first_30": "Part 1",
+    "part2_last_20": "Part 2",
     "all": "Overall",
 }
 JUDGE_ORDER = ["minimax", "deepseek"]
@@ -27,9 +31,15 @@ JUDGE_LABELS = {
     "minimax": "MiniMax M3",
     "deepseek": "DeepSeek V4 Pro",
 }
-JUDGE_COLORS = {
-    "minimax": "#4062bb",
-    "deepseek": "#e36414",
+MODEL_COLORS = {
+    "claude": "#C9651A",
+    "gemini": "#2B7DD8",
+    "gpt": "#2C9558",
+}
+METRIC_STYLES = {
+    "all": {"alpha": 0.95, "hatch": None, "edge_alpha": 0.95},
+    "part1_first_30": {"alpha": 0.56, "hatch": None, "edge_alpha": 0.56},
+    "part2_last_20": {"alpha": 0.22, "hatch": "////", "edge_alpha": 0.80},
 }
 SUMMARY_FIELDS = [
     "judge_family",
@@ -43,6 +53,9 @@ SUMMARY_FIELDS = [
     "avg_percent",
     "score_distribution",
 ]
+TITLE_FONT = "Avenir Next"
+BODY_FONT = "Helvetica Neue"
+FALLBACK_FONT = "DejaVu Sans"
 
 
 def load_jsonl(path: Path) -> list[dict]:
@@ -152,84 +165,206 @@ def score_lookup(rows: list[dict]) -> dict[tuple[str, str, int, str], float]:
     return values
 
 
-def y_labels() -> list[str]:
-    labels = []
-    for model in MODEL_ORDER:
-        for rollout in ROLLOUT_ORDER:
-            labels.append(f"{MODEL_LABELS[model]} R{rollout}")
-    return labels
+def mean(values: list[float]) -> float:
+    return sum(values) / len(values)
 
 
-def plot_scores(rows: list[dict], output_png: Path, output_svg: Path) -> None:
+def pct(value: float) -> str:
+    return f"{value:.1f}%"
+
+
+def color_with_alpha(hex_color: str, alpha: float) -> tuple[float, float, float, float]:
+    rgba = to_rgba(hex_color)
+    return (rgba[0], rgba[1], rgba[2], alpha)
+
+
+def available_font(candidates: list[str]) -> str:
+    available = {font.name for font in font_manager.fontManager.ttflist}
+    for candidate in candidates:
+        if candidate in available:
+            return candidate
+    return FALLBACK_FONT
+
+
+def source_run_count(rows: list[dict], judge: str) -> int:
+    for row in rows:
+        if row["judge_family"] == judge:
+            runs = [run for run in row["source_judge_runs"].split(";") if run]
+            return len(runs)
+    return 0
+
+
+def plot_scores_for_judge(
+    rows: list[dict],
+    judge: str,
+    output_png: Path,
+    output_svg: Path,
+) -> None:
     scores = score_lookup(rows)
-    fig, axes = plt.subplots(1, len(PART_ORDER), figsize=(14.8, 7.0), sharey=True)
+    body_font = available_font([BODY_FONT, TITLE_FONT])
+    title_font = available_font([TITLE_FONT, BODY_FONT])
+
+    plt.rcParams.update(
+        {
+            "font.family": body_font,
+            "font.size": 12,
+            "axes.unicode_minus": False,
+        }
+    )
+    fig = plt.figure(figsize=(10, 10), dpi=220)
     fig.patch.set_facecolor("white")
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
 
-    y_positions = list(range(len(MODEL_ORDER) * len(ROLLOUT_ORDER)))
-    bar_height = 0.32
-    offsets = {
-        "minimax": -bar_height / 2,
-        "deepseek": bar_height / 2,
-    }
+    outer_l, outer_r = 0.025, 0.975
+    table_top = 0.680
+    table_bottom = 0.155
+    row_h = (table_top - table_bottom) / len(MODEL_ORDER)
 
-    for ax, part in zip(axes, PART_ORDER):
-        for judge in JUDGE_ORDER:
-            values = []
-            for model in MODEL_ORDER:
-                for rollout in ROLLOUT_ORDER:
-                    values.append(scores[(judge, model, rollout, part)])
-            ys = [y + offsets[judge] for y in y_positions]
-            bars = ax.barh(
-                ys,
-                values,
-                height=bar_height,
-                label=JUDGE_LABELS[judge],
-                color=JUDGE_COLORS[judge],
+    model_x = 0.045
+    bar_l, bar_r = 0.330, 0.930
+
+    ax.text(
+        outer_l,
+        0.972,
+        "Razavi Bench",
+        ha="left",
+        va="top",
+        fontsize=54,
+        fontfamily=title_font,
+        fontweight="heavy",
+        color="#0B1220",
+    )
+
+    run_count = source_run_count(rows, judge)
+    bullets = [
+        f"Judge model: {JUDGE_LABELS[judge]}; scores average {run_count} judge passes per answer.",
+        "Bars show three-rollout means for Overall, Part 1 (30 questions), and Part 2 (20 questions).",
+        "Black lines show rollout min-to-max; colored dots show rollout 1/2/3 on the same metric row.",
+    ]
+    bullet_y0 = 0.870
+    bullet_gap = 0.034
+    for i, text in enumerate(bullets):
+        y = bullet_y0 - i * bullet_gap
+        ax.text(outer_l, y, "•", ha="left", va="top", fontsize=14, color="#5B6472")
+        ax.text(outer_l + 0.018, y, text, ha="left", va="top", fontsize=14, color="#5B6472")
+
+    ax.add_patch(
+        Rectangle(
+            (outer_l, table_bottom - 0.045),
+            outer_r - outer_l,
+            table_top - table_bottom + 0.110,
+            fill=False,
+            edgecolor="#E1E3E6",
+            linewidth=1.0,
+        )
+    )
+    header_y = 0.715
+    ax.text(model_x, header_y, "MODEL", ha="left", va="center", fontsize=12.5, color="#707070", fontweight="medium")
+    ax.text(bar_l, header_y, "SCORE", ha="left", va="center", fontsize=12.5, color="#707070", fontweight="medium")
+    ax.plot([outer_l, outer_r], [table_top, table_top], color="#E8E8E8", lw=1.0)
+
+    for tick in [0, 0.25, 0.50, 0.75, 1.00]:
+        x = bar_l + tick * (bar_r - bar_l)
+        ax.plot([x, x], [table_bottom, table_top], color="#EEF1F5", lw=0.9, zorder=0)
+        ax.text(x, table_bottom - 0.030, f"{tick:.2f}", ha="center", va="top", fontsize=10.5, color="#747474")
+
+    bar_offsets = [0.050, 0.000, -0.050]
+    bar_h = row_h * 0.115
+    label_x = bar_l - 0.018
+
+    for idx, model in enumerate(MODEL_ORDER):
+        y_top = table_top - idx * row_h
+        y_bottom = y_top - row_h
+        y = (y_top + y_bottom) / 2
+        color = MODEL_COLORS[model]
+        model_name, thinking = MODEL_LABELS[model]
+
+        ax.plot([outer_l, outer_r], [y_bottom, y_bottom], color="#EFEFEF", lw=0.9)
+        ax.text(model_x, y + 0.014, model_name, ha="left", va="center", fontsize=15.0, color="#111827", fontweight="semibold")
+        ax.text(model_x, y - 0.022, thinking, ha="left", va="center", fontsize=11.0, color="#5B6472", fontweight="regular")
+
+        for part, offset in zip(PLOT_PART_ORDER, bar_offsets):
+            yb = y + offset
+            rollout_values = [scores[(judge, model, rollout, part)] for rollout in ROLLOUT_ORDER]
+            value = mean(rollout_values)
+            bar_end = bar_l + (value / 100.0) * (bar_r - bar_l)
+
+            ax.text(label_x, yb, PART_LABELS[part], ha="right", va="center", fontsize=10.8, color="#5B6472")
+            style = METRIC_STYLES[part]
+            ax.add_patch(
+                Rectangle(
+                    (bar_l, yb - bar_h / 2),
+                    bar_end - bar_l,
+                    bar_h,
+                    facecolor=color_with_alpha(color, style["alpha"]),
+                    edgecolor=color_with_alpha(color, style["edge_alpha"]) if style["hatch"] else "none",
+                    linewidth=0.55 if style["hatch"] else 0.0,
+                    hatch=style["hatch"],
+                    zorder=2,
+                )
             )
-            for value, bar in zip(values, bars):
-                ax.text(
-                    value + 0.45,
-                    bar.get_y() + bar.get_height() / 2,
-                    f"{value:.1f}",
-                    va="center",
-                    ha="left",
-                    fontsize=8,
-                    color="#2f2f2f",
+            ax.text(
+                bar_end,
+                yb + bar_h * 0.72,
+                pct(value),
+                ha="center",
+                va="bottom",
+                fontsize=10.2,
+                color="#111827",
+                fontweight="semibold",
+            )
+
+            min_x = bar_l + (min(rollout_values) / 100.0) * (bar_r - bar_l)
+            max_x = bar_l + (max(rollout_values) / 100.0) * (bar_r - bar_l)
+            ax.plot([min_x, max_x], [yb, yb], color="#111827", lw=0.85, alpha=0.68, zorder=4)
+            for rollout, rollout_value in zip(ROLLOUT_ORDER, rollout_values):
+                x = bar_l + (rollout_value / 100.0) * (bar_r - bar_l)
+                ax.scatter(
+                    x,
+                    yb,
+                    s=58,
+                    color=color,
+                    edgecolor="white",
+                    linewidth=1.45,
+                    zorder=5 + rollout,
                 )
 
-        ax.set_title(PART_LABELS[part], fontsize=12, weight="bold")
-        ax.set_xlim(50, 100)
-        ax.set_xlabel("Average score (%)")
-        ax.grid(axis="x", color="#d8d8d8", linewidth=0.8, alpha=0.8)
-        ax.set_axisbelow(True)
-        for spine in ("top", "right", "left"):
-            ax.spines[spine].set_visible(False)
-
-    axes[0].set_yticks(y_positions)
-    axes[0].set_yticklabels(y_labels())
-    axes[0].invert_yaxis()
-
-    for boundary in (2.5, 5.5):
-        for ax in axes:
-            ax.axhline(boundary, color="#c9c9c9", linewidth=0.9)
-
-    fig.suptitle("Razavi-Bench Direct QA Scores by Rollout", fontsize=16, weight="bold", y=0.98)
-    fig.text(
-        0.5,
-        0.925,
-        "Each row is one model rollout. MiniMax and DeepSeek bars average the two available judge runs.",
-        ha="center",
-        fontsize=10,
-        color="#4a4a4a",
+    ax.text(
+        outer_l,
+        0.064,
+        '[1] B. Razavi, "Analog Design Experiments With AI--Part 1 [The Analog Mind]," IEEE Solid-State Circuits Magazine, vol. 17, no. 4, pp. 11-15, Fall 2025.',
+        ha="left",
+        va="bottom",
+        fontsize=9,
+        color="#6B7280",
     )
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower center", ncol=2, frameon=False, bbox_to_anchor=(0.5, 0.02))
+    ax.text(
+        outer_l,
+        0.040,
+        '[2] B. Razavi, "Analog Design Experiments With AI--Part 2 [The Analog Mind]," IEEE Solid-State Circuits Magazine, vol. 18, no. 2, pp. 8-13, Spring 2026.',
+        ha="left",
+        va="bottom",
+        fontsize=9,
+        color="#6B7280",
+    )
 
     output_png.parent.mkdir(parents=True, exist_ok=True)
-    fig.tight_layout(rect=[0.03, 0.08, 1, 0.9])
-    fig.savefig(output_png, dpi=220)
-    fig.savefig(output_svg)
+    fig.savefig(output_png, facecolor="white")
+    fig.savefig(output_svg, facecolor="white")
     plt.close(fig)
+
+
+def plot_scores(rows: list[dict], out_dir: Path) -> list[Path]:
+    outputs = []
+    for judge in JUDGE_ORDER:
+        output_png = out_dir / f"judge_scores_{judge}.png"
+        output_svg = out_dir / f"judge_scores_{judge}.svg"
+        plot_scores_for_judge(rows, judge, output_png, output_svg)
+        outputs.extend([output_png, output_svg])
+    return outputs
 
 
 def main() -> None:
@@ -262,11 +397,8 @@ def main() -> None:
     if args.rebuild_summary:
         write_summary(args.summary, build_summary_rows(args.judge_output_dir))
     rows = load_summary(args.summary)
-    output_png = args.out_dir / "judge_scores.png"
-    output_svg = args.out_dir / "judge_scores.svg"
-    plot_scores(rows, output_png, output_svg)
-    print(output_png)
-    print(output_svg)
+    for output in plot_scores(rows, args.out_dir):
+        print(output)
 
 
 if __name__ == "__main__":

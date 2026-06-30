@@ -20,7 +20,8 @@ experiment.
 - `judge_scores/summary.csv`: rollout-aware aggregate score table for reports
   and plots.
 - `tools/`: scripts used to generate `judge_outputs/*.jsonl`.
-- `figures/`: plots generated from `judge_scores/summary.csv`.
+- `figures/`: MiniMax and DeepSeek score plots generated from
+  `judge_scores/summary.csv`.
 
 Each `model_outputs/*.jsonl` line is one JSON object with the effective
 benchmark question, final visible model answer, run date, rollout number,
@@ -62,11 +63,15 @@ python3 experiments/2026-06-26-direct-qa/tools/run_deepseek_judge.py \
   --rollout 1
 ```
 
-Generate the judge-score bar chart:
+Generate the judge-score plots:
 
 ```bash
 python3 experiments/2026-06-26-direct-qa/tools/plot_scores.py
 ```
+
+This writes `figures/judge_scores_minimax.*` and
+`figures/judge_scores_deepseek.*`. The bars show rollout means, black lines
+show rollout min-to-max, and colored dots show the three rollout aggregates.
 
 Regenerate the summary table before plotting:
 
