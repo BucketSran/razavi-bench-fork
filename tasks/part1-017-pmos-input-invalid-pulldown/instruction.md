@@ -1,4 +1,4 @@
-# part1-017-pmos-input-invalid-pulldown
+# part1-017-pmos-gm-gm-amplifier
 
 ## Question
 
