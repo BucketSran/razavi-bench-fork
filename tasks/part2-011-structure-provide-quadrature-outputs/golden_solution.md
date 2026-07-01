@@ -27,14 +27,14 @@ careful answer is: the circuit provides approximate or nominal quadrature, but
 not exact or robust 90-degree quadrature unless the paths are carefully matched,
 buffered, or calibrated.
 
-Full-credit rule: give full credit if the answer says the structure is
+A complete answer should say the structure is
 nominally a quadrature divide-by-two but not an accurate/robust quadrature
 generator, and identifies the two main nonidealities: the extra `Inv3` delay
 from `Y` to `Z`, and unequal latch loading, especially the Miller-multiplied
 capacitance of `Inv3`.
 
-Partial-credit rule: an answer that only explains the ideal half-clock-period
-spacing and says the circuit provides quadrature outputs should receive partial
-credit, not full credit, because it misses the analog delay and loading
-asymmetries. An answer that says simply "no quadrature" without recognizing
-the nominal divide-by-two quadrature mechanism is also incomplete.
+An answer that only explains the ideal half-clock-period spacing and says the
+circuit provides quadrature outputs is incomplete because it misses the analog
+delay and loading asymmetries. An answer that says simply "no quadrature"
+without recognizing the nominal divide-by-two quadrature mechanism is also
+incomplete.

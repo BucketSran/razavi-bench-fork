@@ -201,6 +201,7 @@ def draw_bullet_parts(
     y: float,
     parts: list[tuple[str, str]],
     font_family: str,
+    fontsize: float = 14,
 ) -> None:
     current_x = x
     for text, weight in parts:
@@ -211,12 +212,12 @@ def draw_bullet_parts(
             display_text,
             ha="left",
             va="top",
-            fontsize=14,
+            fontsize=fontsize,
             fontfamily=font_family,
             fontweight=weight,
             color="#5B6472",
         )
-        current_x += text_width_fraction(display_text, font_family, 14, weight, fig)
+        current_x += text_width_fraction(display_text, font_family, fontsize, weight, fig)
         if display_text != text:
             current_x += 0.006
 
@@ -276,9 +277,8 @@ def plot_scores_for_judge(
     run_count = source_run_count(rows, judge)
     bullets: list[str | list[tuple[str, str]]] = [
         [
-            ("Judge model: ", "regular"),
-            (JUDGE_LABELS[judge], "semibold"),
-            (f"; scores average {run_count} judge passes per answer.", "regular"),
+            ("Judge model: ", "bold"),
+            (JUDGE_LABELS[judge], "bold"),
         ],
         "Bars show three-rollout means for Overall, Part 1 (30 questions), and Part 2 (20 questions).",
         "Black lines show rollout min-to-max; colored dots show rollout 1/2/3 on the same metric row.",
@@ -287,9 +287,10 @@ def plot_scores_for_judge(
     bullet_gap = 0.034
     for i, text in enumerate(bullets):
         y = bullet_y0 - i * bullet_gap
-        ax.text(outer_l, y, "•", ha="left", va="top", fontsize=14, color="#5B6472")
+        fontsize = 16 if i == 0 else 14
+        ax.text(outer_l, y, "•", ha="left", va="top", fontsize=fontsize, color="#5B6472")
         if isinstance(text, list):
-            draw_bullet_parts(ax, fig, outer_l + 0.018, y, text, body_font)
+            draw_bullet_parts(ax, fig, outer_l + 0.018, y, text, body_font, fontsize=fontsize)
         else:
             ax.text(outer_l + 0.018, y, text, ha="left", va="top", fontsize=14, color="#5B6472")
 

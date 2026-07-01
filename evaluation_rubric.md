@@ -25,3 +25,21 @@ connections, and right final claims supported by misleading physical reasoning.
 
 Do not treat Razavi's historical scores for article responses as hidden labels
 for new model answers. They are examples used to infer this guide.
+
+## Consistency Rules
+
+Distinguish background recognition from answering the question. Correctly naming
+a topology, writing a familiar input-match relation, identifying a device group,
+or mentioning a real secondary effect is not enough for a high score if the
+answer misses the dominant mechanism or design consequence asked by the task.
+
+If the final conclusion contradicts the golden solution's central result, treat
+the answer as mostly incorrect even if it contains some relevant circuit
+background. Award partial credit only when the answer explicitly captures a
+substantial part of the golden mechanism or tradeoff, not merely because it uses
+reasonable analog vocabulary.
+
+For trend and optimization questions, the direction of the trend and the design
+conclusion are central. A one-sided answer that discusses a real limiting effect
+but reaches the opposite design conclusion should be graded consistently as a
+major miss, not as mostly correct.
